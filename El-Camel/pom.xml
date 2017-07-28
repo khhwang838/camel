@@ -28,7 +28,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-http</artifactId>
+			<artifactId>camel-http4</artifactId>
 			<version>${org.apache.camel-version}</version>
 		</dependency>
 		<dependency>
@@ -36,6 +36,22 @@
 		    <artifactId>camel-mina</artifactId>
 		    <version>${org.apache.camel-version}</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.apache.camel</groupId>
+		    <artifactId>camel-jetty</artifactId>
+		    <version>${org.apache.camel-version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.camel</groupId>
+		    <artifactId>camel-sql</artifactId>
+		    <version>${org.apache.camel-version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>commons-dbcp</groupId>
+		    <artifactId>commons-dbcp</artifactId>
+		    <version>1.4</version>
+		</dependency>
+
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
