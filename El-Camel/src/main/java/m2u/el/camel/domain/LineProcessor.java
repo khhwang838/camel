@@ -8,12 +8,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class LineProcessor implements Processor{
 
-	int lineNum;
-	
 	@Override
 	public void process(Exchange exchange) throws Exception {
 		Message msg = exchange.getIn();
 		String line = (String)msg.getBody(String.class);
+		
+		line = new StringBuffer(line).reverse().toString();
+		line += System.lineSeparator();
+
+		msg.setBody(line);
 		System.out.println("line : " + line);
 	}
 

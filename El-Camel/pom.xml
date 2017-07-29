@@ -51,7 +51,6 @@
 		    <artifactId>commons-dbcp</artifactId>
 		    <version>1.4</version>
 		</dependency>
-
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>

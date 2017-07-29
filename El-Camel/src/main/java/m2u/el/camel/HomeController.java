@@ -187,16 +187,17 @@ public class HomeController {
 		
 		context.addRoutes(new RouteBuilder() {
 			public void configure() {
-				from("file:/d:/kihyun/z99. temp/camel/from")
+//				from("file:/d:/kihyun/z99. temp/camel/from/*.txt")
+				from("file:/Users/KH/Documents/temp/from?antInclude=*.txt&initialDelay=3000&delay=5000&noop=true")
 				.split()
 				.tokenize(System.lineSeparator())
 				.process(lineProcessor)
-				.to("file:/d:/kihyun/z99. temp/camel/to");
+				.to("file:/Users/KH/Documents/temp/to?fileExist=Append");
+//				.to("file:/d:/kihyun/z99. temp/camel/to");
 			}
 		});
 		context.start(); // start하면 계속 watch하고 있다가 파일이 추가될 경우 자동으로 move함.
 		Thread.currentThread().join();
-
 		logger.info("Modifying and copying file test finished !!!");
 	}
 }
