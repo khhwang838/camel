@@ -24,7 +24,6 @@
 	
 	<context:component-scan base-package="m2u.el.camel" />
 	
-	<!-- this is the JDBC data source which uses an in-memory only Apache Derby database -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 	  <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
 	  <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
@@ -33,8 +32,8 @@
 	</bean>
 	 
 	<!-- configure the Camel SQL component to use the JDBC data source -->
-	<bean id="sql" class="org.apache.camel.component.sql.SqlComponent">
+	<!-- <bean id="sql" class="org.apache.camel.component.sql.SqlComponent">
 	  <property name="dataSource" ref="dataSource"/>
-	</bean>
+	</bean> -->
 	
 </beans>
