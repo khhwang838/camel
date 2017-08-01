@@ -30,9 +30,9 @@ import m2u.el.camel.processor.FileProcessor;
  * Handles requests for the application home page.
  */
 @Controller
-public class HomeController {
+public class EyelinkCamelController {
 
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	private static final Logger logger = LoggerFactory.getLogger(EyelinkCamelController.class);
 
 	final AtomicBoolean flag = new AtomicBoolean(true);
 
@@ -54,51 +54,12 @@ public class HomeController {
 //		fileModifyCopyTest();
 //		fileToDB_JDBC_Test();
 //		dbToFile_JDBC_Test();
-		httpToHttp_Test();
+//		httpToHttp_Test();
 	}
 
-	private static void httpToHttp_Test() {
-
-		logger.info("File to DB test started ...");
-
+	private static void manualRequestTest() {
+		
 		CamelContext context = new DefaultCamelContext();
-
-//		final HttpEndpoint elbot = (HttpEndpoint) context.getEndpoint("http://localhost:8080/aibot/message");
-//		final HttpEndpoint aibot = (HttpEndpoint) context.getEndpoint("http://localhost:9080/ProgramD/GetBotResponse?input=");
-
-		try {
-			context.addRoutes(new RouteBuilder() {
-				public void configure() {
-					// from("servlet:localhost:8080/aibot")
-					from("direct:start")
-					.setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=utf-8;"))
-					.setHeader(Exchange.HTTP_METHOD, constant("GET")).process(new Processor() {
-						@Override
-						public void process(Exchange arg0) throws Exception {
-							System.out.println("processing message......");
-							int keyIdx = 1;
-							for (String key : arg0.getIn().getHeaders().keySet()) {
-								System.out.println(keyIdx++ + " " + arg0.getIn().getHeaders().get(key));
-							}
-							keyIdx = 1;
-							for (String key : arg0.getProperties().keySet()) {
-								System.out.println(keyIdx++ + " " + arg0.getIn().getHeaders().get(key));
-							}
-						}
-					});
-//					.to("http:localhost:9080/ProgramD/GetBotResponse?input=hi?bridgeEndpoint=true&amp;throwExceptionOnFailure=false");
-				}
-			});
-			context.setHandleFault(false);
-			context.start();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-//		ConsumerTemplate ct = context.createConsumerTemplate();
-//		Exchange in = ct.receive("http://localhost:8080/aibot");
-
 		ProducerTemplate pt = context.createProducerTemplate();
 		
 		Exchange out = pt.request("http:localhost:9080/ProgramD/GetBotResponse?input=로또",
@@ -106,22 +67,37 @@ public class HomeController {
 					@Override
 					public void process(Exchange arg0) throws Exception {
 						System.out.println("processing message......2222");
-						int keyIdx = 1;
-						for (String key : arg0.getIn().getHeaders().keySet()) {
-							System.out.println(keyIdx++ + " " + arg0.getIn().getHeaders().get(key));
-						}
-						keyIdx = 1;
-						for (String key : arg0.getProperties().keySet()) {
-							System.out.println(keyIdx++ + " " + arg0.getIn().getHeaders().get(key));
-						}
 					}
 				});
 
 		String resp = out.getOut().getBody(String.class);
 		System.out.println("resp : " + resp);
+	}
+	
+	private static void httpToHttp_Test() throws InterruptedException {
 
-		// Thread.currentThread().join();
-		// logger.info("thread joined");
+		logger.info("Http(ELBOT) to Http(Program D) test started ...");
+
+		CamelContext context = new DefaultCamelContext();
+
+		try {
+			context.addRoutes(new RouteBuilder() {
+				
+				@Override
+				public void configure() throws Exception {
+					from("jetty:http://localhost:10080/camel")
+					.to("netty4-http:http://localhost:9080/ProgramD/GetBotResponse?bridgeEndpoint=true&throwExceptionOnFailure=false")
+					;
+				}
+			});
+			context.setHandleFault(false);
+			context.start();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
+		Thread.currentThread().join();
+		logger.info("thread joined");
 	}
 	
 	private static void dbToFile_JDBC_Test() {
